@@ -1,0 +1,106 @@
+{
+  "project_info": {
+    "project_number": "240712921797",
+    "firebase_url": "https://simple-blog-app-f85fa.firebaseio.com",
+    "project_id": "simple-blog-app-f85fa",
+    "storage_bucket": "simple-blog-app-f85fa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:240712921797:android:67042970cb1d7eaef9b6ac",
+        "android_client_info": {
+          "package_name": "com.blackbrick.blogapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "240712921797-8l7h0oengncl86k9ibhp4s449s3vq5fv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.blackbrick.blogapp",
+            "certificate_hash": "b3b95fb58ef472496ced76bfa2145ac93e050685"
+          }
+        },
+        {
+          "client_id": "240712921797-6p16pkkq8ojdnmt7r7pfjohkrnp65j7m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7RrIAOTnppJGyaX3hwskQqnLV_a3A1Nw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "240712921797-6p16pkkq8ojdnmt7r7pfjohkrnp65j7m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:240712921797:android:65552763aa7abc10",
+        "android_client_info": {
+          "package_name": "com.blackbrick.simpleblogapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "240712921797-6p16pkkq8ojdnmt7r7pfjohkrnp65j7m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7RrIAOTnppJGyaX3hwskQqnLV_a3A1Nw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "240712921797-6p16pkkq8ojdnmt7r7pfjohkrnp65j7m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:240712921797:android:f68973cd4aad3fd1f9b6ac",
+        "android_client_info": {
+          "package_name": "com.blackbrick.wecare"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "240712921797-6p16pkkq8ojdnmt7r7pfjohkrnp65j7m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7RrIAOTnppJGyaX3hwskQqnLV_a3A1Nw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "240712921797-6p16pkkq8ojdnmt7r7pfjohkrnp65j7m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

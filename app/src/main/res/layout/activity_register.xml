@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RegisterActivity"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Welcome to Blog App"
+        android:textSize="30dp"/>
+
+    <EditText
+        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Email"
+        android:id="@+id/register_email_id"/>
+
+    <EditText
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Password"
+        android:id="@+id/register_password_id"/>
+
+    <Button
+        android:id="@+id/register_btn_id"
+        android:layout_width="262dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="50dp"
+        android:layout_marginLeft="50dp"
+        android:text="Register Account"
+        android:textAlignment="center" />
+
+
+    <ProgressBar
+        android:id="@+id/register_progress_id"
+        android:layout_width="291dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="90px"
+        android:layout_marginTop="50px"
+        android:indeterminate="true"
+        android:visibility="invisible" />
+</LinearLayout>

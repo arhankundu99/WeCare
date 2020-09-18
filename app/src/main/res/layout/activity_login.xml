@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity"
+    android:orientation="vertical"
+    android:padding="50dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Welcome to Blog App"
+        android:textSize="30dp"/>
+
+    <EditText
+        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Email"
+        android:id="@+id/email_id"/>
+
+    <EditText
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Password"
+        android:id="@+id/password_id"/>
+
+    <Button
+        android:id="@+id/login_btn_id"
+        android:layout_width="205dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="50dp"
+        android:layout_marginLeft="50dp"
+        android:text="Login to Account"
+        android:textAlignment="center"/>
+
+    <Button
+        android:id="@+id/signup_btn_id"
+        android:layout_width="298dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:textAlignment="center"
+        android:text="Need A New Account" />
+
+    <ProgressBar
+        android:layout_width="212dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="90px"
+        android:layout_marginTop="50px"
+        android:id="@+id/login_progress_id"
+        android:indeterminate="true"
+        android:visibility="invisible"
+        />
+
+</LinearLayout>
