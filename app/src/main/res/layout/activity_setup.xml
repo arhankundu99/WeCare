@@ -7,7 +7,7 @@
     tools:context=".SetupActivity">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/accountSetupID"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
@@ -22,6 +22,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="32dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="8dp"
         android:src="@drawable/default_profile_image"
@@ -29,7 +30,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/accountSetupID"
         app:layout_constraintVertical_bias="1.0" />
 
     <EditText
@@ -40,6 +41,7 @@
         android:layout_marginTop="100dp"
         android:layout_marginBottom="200dp"
         android:ems="10"
+        android:hint="Enter your name"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

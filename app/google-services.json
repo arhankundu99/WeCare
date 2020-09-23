@@ -81,6 +81,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "240712921797-7b55qsorcphului5tln5fcf2ku3lptu4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.blackbrick.wecare",
+            "certificate_hash": "b3b95fb58ef472496ced76bfa2145ac93e050685"
+          }
+        },
+        {
           "client_id": "240712921797-6p16pkkq8ojdnmt7r7pfjohkrnp65j7m.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -2,6 +2,9 @@ package com.blackbrick.wecare;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,35 +12,67 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Toolbar mainToolbar;
-    private Button addPostBtn;
-
     private FirebaseAuth mAuth;
+    private FirebaseFirestore firebaseFirestore;
+
+    private BottomNavigationView mainBottomNav;
+
+    private String current_userID;
+
+    private HomeFragment homeFragment;
+    private NotificationFragment notificationFragment;
+    private AccountFragment accountFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
 
-        mainToolbar = findViewById(R.id.mainToolbar);
 
-        addPostBtn = findViewById(R.id.add);
+        mainBottomNav = findViewById(R.id.mainBottomNav);
 
-        addPostBtn.setOnClickListener(new View.OnClickListener() {
+        homeFragment = new HomeFragment();
+        notificationFragment = new NotificationFragment();
+        accountFragment = new AccountFragment();
+
+        mainBottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, NewPostActivity.class);
-                startActivity(intent);
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Toast.makeText(MainActivity.this, "The fragment is clicked", Toast.LENGTH_LONG).show();
+                switch (item.getItemId()){
+                    case R.id.bottom_action_home:
+                        replaceFragment(homeFragment);
+                        return true;
+                    case R.id.bottom_action_notif:
+                        replaceFragment(notificationFragment);
+                        return true;
+                    case R.id.bottom_action_account:
+                        replaceFragment(accountFragment);
+                        return true;
+                }
+
+                return false;
             }
         });
+
     }
 
     @Override
@@ -49,6 +84,24 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
+        }
+        else{
+            current_userID = mAuth.getCurrentUser().getUid();
+            firebaseFirestore.collection("Users").document(current_userID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if(task.isSuccessful()){
+                        if(!task.getResult().exists()){
+                            Intent intent = new Intent(MainActivity.this, SetupActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    }
+                    else{
+                        Toast.makeText(MainActivity.this, "Error!", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
         }
     }
 
@@ -64,7 +117,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_logout_btn:
                 logout();
                 return true;
-
+            case R.id.action_settings_btn:
+                sendToSetupActivity();
+            case R.id.menu_post_id:
+                sendToPostActivity();
             default:
                 return false;
         }
@@ -75,5 +131,21 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    private void sendToSetupActivity(){
+        Intent intent = new Intent(MainActivity.this, SetupActivity.class);
+        startActivity(intent);
+    }
+    private void sendToPostActivity(){
+        Intent intent = new Intent(MainActivity.this, NewPostActivity.class);
+        startActivity(intent);
+    }
+
+    private void replaceFragment(Fragment fragment){
+
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.main_container, fragment);
+        fragmentTransaction.commit();
     }
 }

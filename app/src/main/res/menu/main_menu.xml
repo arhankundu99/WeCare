@@ -10,5 +10,8 @@
         android:id="@+id/action_settings_btn"/>
     <item android:title="Logout"
         android:id="@+id/action_logout_btn"/>
+    <item
+        android:id="@+id/menu_post_id"
+        android:title="Add New Post" />
     />
 </menu>
