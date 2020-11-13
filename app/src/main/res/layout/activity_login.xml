@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    tools:context=".activities.LoginActivity">
 
     <TextView
         android:id="@+id/headingID"
@@ -13,8 +13,10 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="50dp"
         android:layout_marginEnd="8dp"
-        android:text="Welcome to WeCare"
-        android:textSize="30dp"
+        android:text="WeCare: Lifting up with hands of help"
+        android:textSize="25sp"
+        android:paddingLeft="15dp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -27,6 +29,8 @@
         android:layout_marginTop="30dp"
         android:layout_marginEnd="8dp"
         android:hint="Enter Email"
+        android:padding="15dp"
+        android:background="@drawable/edittext_custom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/headingID" />
@@ -38,6 +42,9 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:hint="Enter Password"
+        android:background="@drawable/edittext_custom"
+        android:padding="15dp"
+        android:layout_marginTop="20dp"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,8 +58,10 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="20dp"
         android:text="Login to Account"
         android:textAlignment="center"
+        android:background="@drawable/button_custom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password_id" />
@@ -61,10 +70,10 @@
         android:id="@+id/signup_btn_id"
         android:layout_width="298dp"
         android:layout_height="wrap_content"
-        android:layout_margin="1dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
+        android:background="@drawable/button_custom"
         android:text="Need A New Account"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
@@ -76,7 +85,7 @@
         android:layout_width="212dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
         android:indeterminate="true"
         android:visibility="invisible"

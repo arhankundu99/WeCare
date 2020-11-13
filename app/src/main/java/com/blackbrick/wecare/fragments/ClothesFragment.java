@@ -1,4 +1,4 @@
-package com.blackbrick.wecare;
+package com.blackbrick.wecare.fragments;
 
 import android.content.Context;
 import android.net.Uri;
@@ -11,8 +11,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 
+import com.blackbrick.wecare.R;
+import com.blackbrick.wecare.adapter.PostRecyclerAdapter;
+import com.blackbrick.wecare.classes.post;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -24,19 +26,17 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+public class ClothesFragment extends Fragment {
 
-/**
- * A simple {@link Fragment} subclass.
-**/
-public class HomeFragment extends Fragment {
-
-    private RecyclerView post_list_view;
-    private List<post> post_list;
+    private RecyclerView recyclerView;
+    private List<post> postList;
 
     private FirebaseFirestore firebaseFirestore;
     private PostRecyclerAdapter postRecyclerAdapter;
-    public HomeFragment() {
+
+    public ClothesFragment() {
         // Required empty public constructor
+
     }
 
 
@@ -44,26 +44,30 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container,false);
+        View view = inflater.inflate(R.layout.fragment_clothes, container,false);
 
-        post_list = new ArrayList<>();
-        post_list_view = view.findViewById(R.id.blog_list_view);
-        postRecyclerAdapter = new PostRecyclerAdapter(post_list);
+        postList = new ArrayList<>();
+        recyclerView = view.findViewById(R.id.clothes_recycler_view);
+        postRecyclerAdapter = new PostRecyclerAdapter(postList);
 
-        post_list_view.setLayoutManager(new LinearLayoutManager(getActivity()));
-        post_list_view.setAdapter(postRecyclerAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(postRecyclerAdapter);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
-        firebaseFirestore.collection("Posts").addSnapshotListener(new EventListener<QuerySnapshot>() {
+        firebaseFirestore.collection("Posts").document("clothes Posts").collection("clothes").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                for(DocumentChange doc: queryDocumentSnapshots.getDocumentChanges()){
-                    if(doc.getType() == DocumentChange.Type.ADDED){
-                        post post = doc.getDocument().toObject(post.class);
-                        post_list.add(post);
+                try {
+                    for (DocumentChange doc : queryDocumentSnapshots.getDocumentChanges()) {
+                        if (doc.getType() == DocumentChange.Type.ADDED) {
+                            post post = doc.getDocument().toObject(post.class);
+                            postList.add(post);
 
-                        postRecyclerAdapter.notifyDataSetChanged();
+                            postRecyclerAdapter.notifyDataSetChanged();
+                        }
                     }
+                } catch (Exception exception) {
+
                 }
             }
         });

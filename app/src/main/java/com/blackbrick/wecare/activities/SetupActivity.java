@@ -1,13 +1,11 @@
-package com.blackbrick.wecare;
+package com.blackbrick.wecare.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -16,10 +14,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
+import com.blackbrick.wecare.R;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -29,24 +28,29 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
+//for loading image into circular imageview
+import com.bumptech.glide.Glide;
+
+//for cropping image
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
+
+//for circular imageciew
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SetupActivity extends AppCompatActivity {
 
     private CircleImageView setupImage;
-    private Uri mainImageURI;
-
+    private Uri mainImageURI; //URI(Uniform resource identifier) as its name suggests is used to identify resource(whether it be a page of text, a video or sound clip, a still or animated image, or a program).
     private EditText setupName;
     private Button setupBtn;
 
-    private String user_id;
+    private String userId;
+    private ProgressBar progressBar;
 
     private StorageReference storageReference;
     private FirebaseAuth firebaseAuth;
@@ -58,17 +62,20 @@ public class SetupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_setup);
 
         firebaseAuth = FirebaseAuth.getInstance();
+
+        // in this activity, we store the images in firebase storage
         storageReference = FirebaseStorage.getInstance().getReference();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
-
+        progressBar = findViewById(R.id.accountSetupProgressBarID);
         setupImage = findViewById(R.id.setup_image);
         setupName = findViewById(R.id.setup_name);
         setupBtn = findViewById(R.id.setup_btn);
 
-        user_id = firebaseAuth.getCurrentUser().getUid();
+        userId = firebaseAuth.getCurrentUser().getUid();
 
-        firebaseFirestore.collection("Users").document(user_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        //if user-details already exists in firebase, load image of user in the circular image
+        firebaseFirestore.collection("Users").document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if(task.isSuccessful()){
@@ -83,10 +90,8 @@ public class SetupActivity extends AppCompatActivity {
                         setupName.setText(name);
                         // why this is not working
 
+                        //glide is used for loading image into circular imageview
                         Glide.with(SetupActivity.this).load(image).into(setupImage);
-                    }
-                    else{
-
                     }
                 }
             }
@@ -113,15 +118,27 @@ public class SetupActivity extends AppCompatActivity {
         setupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String user_name = setupName.getText().toString();
+                progressBar.setVisibility(View.VISIBLE);
+                final String userName = setupName.getText().toString();
 
-                if(user_name.length() != 0){
-                    user_id = firebaseAuth.getCurrentUser().getUid();
+                if(userName.length() == 0){
+                    Toast.makeText(SetupActivity.this, "Enter your name", Toast.LENGTH_SHORT).show();
+                }
+                else if(mainImageURI == null){
+                    Toast.makeText(SetupActivity.this, "Enter your image", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    userId = firebaseAuth.getCurrentUser().getUid();
 
-                    StorageReference image_path = storageReference.child("profile_images").child(user_id+".jpg");
+                    //get reference to the path where you want to store the image
+                    StorageReference image_path = storageReference.child("profile_images").child(userId+".jpg");
+
+                    //add the profile image in storage
                     image_path.putFile(mainImageURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            //task is successful
+                            //now add the image download uri to firestore
                             final Task<Uri> firebaseUri = taskSnapshot.getStorage().getDownloadUrl();
                             firebaseUri.addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
@@ -130,10 +147,11 @@ public class SetupActivity extends AppCompatActivity {
                                     //Toast.makeText(SetupActivity.this, downloadUrl, Toast.LENGTH_SHORT).show();
 
                                     Map<String, String> userMap = new HashMap<>();
-                                    userMap.put("name", user_name);
-                                    userMap.put("image", downloadUri.toString());
+                                    userMap.put("name", userName);
+                                    userMap.put("image", downloadUri);
 
-                                    firebaseFirestore.collection("Users").document(user_id).set(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    //create a collection users and add user details
+                                    firebaseFirestore.collection("Users").document(userId).set(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if(task.isSuccessful()){
@@ -153,9 +171,17 @@ public class SetupActivity extends AppCompatActivity {
                         }
                     });
                 }
+                progressBar.setVisibility(View.INVISIBLE);
             }
         });
     }
+    public void bringImagePicker(){
+        CropImage.activity()
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .setAspectRatio(1,1)
+                .start(SetupActivity.this);
+    }
+    //Override onActivityResult method to get crop result, this method will fire after the bringImagePicker() method
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -163,18 +189,12 @@ public class SetupActivity extends AppCompatActivity {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 mainImageURI = result.getUri();
-
                 setupImage.setImageURI(mainImageURI);
 
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
+                Toast.makeText(SetupActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
             }
         }
-    }
-    public void bringImagePicker(){
-        CropImage.activity()
-                .setGuidelines(CropImageView.Guidelines.ON)
-                .setAspectRatio(1,1)
-                .start(SetupActivity.this);
     }
 }

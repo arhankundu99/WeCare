@@ -1,4 +1,4 @@
-package com.blackbrick.wecare;
+package com.blackbrick.wecare.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,19 +10,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
+import com.blackbrick.wecare.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class RegisterActivity extends AppCompatActivity {
     private EditText registerEmailText;
     private EditText registerPassText;
+    private EditText registerConfirmPassText;
     private Button registerBtn;
-    private ProgressBar loginProgress;
+    private ProgressBar registerProgress;
     private FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,19 +30,25 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         mAuth = FirebaseAuth.getInstance();
+
         registerEmailText = findViewById(R.id.register_email_id);
         registerPassText = findViewById(R.id.register_password_id);
+        registerConfirmPassText = findViewById(R.id.register_confirm_password_id);
         registerBtn = findViewById(R.id.register_btn_id);
-        loginProgress = findViewById(R.id.login_progress_id);
-
+        registerProgress = findViewById(R.id.register_progress_id);
 
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String email = registerEmailText.getText().toString();
                 String password = registerPassText.getText().toString();
+                String passwordConfirm = registerConfirmPassText.getText().toString();
 
-                if(!(email.length() == 0 || password.length() == 0)){
+                if(!(email.length() == 0 || password.length() == 0) || passwordConfirm.length() == 0 || !password.equals(passwordConfirm)){
+
+                    //make progressbar visible
+                    registerProgress.setVisibility(View.VISIBLE);
+
                     mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -50,31 +56,17 @@ public class RegisterActivity extends AppCompatActivity {
 
                                 Intent setupIntent = new Intent(RegisterActivity.this, SetupActivity.class);
                                 startActivity(setupIntent);
+                                finish();
                             }
                             else{
-                                Toast.makeText(RegisterActivity.this, "Error!",Toast.LENGTH_SHORT).show();
+                                String error = task.getException().toString();
+                                Toast.makeText(RegisterActivity.this, error,Toast.LENGTH_SHORT).show();
                             }
+                            registerProgress.setVisibility(View.INVISIBLE);
                         }
                     });
                 }
             }
         });
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        FirebaseUser current_user = mAuth.getCurrentUser();
-
-        if(current_user != null){
-            sendToMain();
-        }
-
-    }
-    private void sendToMain(){
-        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
     }
 }

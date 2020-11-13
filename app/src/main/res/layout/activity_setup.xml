@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SetupActivity">
+    tools:context=".activities.SetupActivity">
 
     <TextView
         android:id="@+id/accountSetupID"
@@ -13,6 +13,7 @@
         android:layout_margin="10dp"
         android:text="Account Setup"
         android:textSize="30dp"
+        android:textAlignment="center"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="10dp" />
@@ -25,7 +26,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="8dp"
-        android:src="@drawable/default_profile_image"
+        android:src="@drawable/circular_profile_image"
         app:layout_constraintBottom_toTopOf="@+id/setup_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -34,16 +35,19 @@
         app:layout_constraintVertical_bias="1.0" />
 
     <EditText
-
         android:id="@+id/setup_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:layout_marginBottom="200dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/edittext_custom"
         android:ems="10"
         android:hint="Enter your name"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:padding="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/phoneNumID"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/setup_image" />
@@ -51,14 +55,44 @@
     <Button
         android:id="@+id/setup_btn"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="FINISH Account Setup"
+        android:layout_marginBottom="150dp"
+        android:background="@drawable/button_custom"
+        android:padding="10dp"
+        android:text="Finish Account Setup"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/setup_name" />
+        app:layout_constraintTop_toBottomOf="@+id/phoneNumID" />
+
+    <EditText
+        android:id="@+id/phoneNumID"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:padding="15dp"
+        android:hint="Enter your phone number"
+        android:inputType="textPersonName|phone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setup_name"
+        android:background="@drawable/edittext_custom"/>
+
+    <ProgressBar
+        android:id="@+id/accountSetupProgressBarID"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setup_btn" />
 </androidx.constraintlayout.widget.ConstraintLayout>

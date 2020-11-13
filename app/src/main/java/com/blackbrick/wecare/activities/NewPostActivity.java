@@ -1,19 +1,21 @@
-package com.blackbrick.wecare;
+package com.blackbrick.wecare.activities;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.blackbrick.wecare.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -27,12 +29,11 @@ import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
-import java.util.FormatFlagsConversionMismatchException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-public class NewPostActivity extends AppCompatActivity {
+public class NewPostActivity extends AppCompatActivity{
     private int MAX_LENGTH = 100;
 
     private ImageView newPostImage;
@@ -41,11 +42,14 @@ public class NewPostActivity extends AppCompatActivity {
 
     private Uri postImageUri = null;
 
-    private ProgressBar newPostProgress;
-
     private StorageReference storageReference;
     private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth mAuth;
+
+    private String category;
+
+    private Spinner spinner;
+    private static final String[] paths = {"Select Category", "Food", "Blood", "Clothes", "Books"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,21 +60,59 @@ public class NewPostActivity extends AppCompatActivity {
         storageReference = FirebaseStorage.getInstance().getReference();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
+        spinner = findViewById(R.id.spinner);
+
         newPostImage = findViewById(R.id.postImageID);
         newPostDesc = findViewById(R.id.postdesc_textID);
         newPostBtn = findViewById(R.id.post_btnID);
-        newPostProgress = findViewById(R.id.new_post_progress);
 
-        newPostImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                CropImage.activity()
-                        .setGuidelines(CropImageView.Guidelines.ON)
-                        .setMinCropResultSize(512, 512)
-                        .setAspectRatio(1,1)
-                        .start(NewPostActivity.this);
-            }
-        });
+        spinner.setPrompt("Select Category");
+        ArrayAdapter<String>adapter = new ArrayAdapter<String>(NewPostActivity.this,
+                android.R.layout.simple_spinner_item,paths);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+                                              @Override
+                                              public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                                                  switch (position) {
+                                                      case 1:
+                                                          //blood fragment
+                                                          category = "food";
+                                                          break;
+                                                      case 2:
+                                                          //clothes fragment
+                                                          category = "blood";
+                                                          break;
+                                                      case 3:
+                                                          // food fragment
+                                                          category = "clothes";
+                                                          break;
+                                                      case 4:
+                                                          // books fragment
+                                                          category = "books";
+                                                          break;
+
+                                                  }
+                                              }
+
+                                              @Override
+                                              public void onNothingSelected(AdapterView<?> adapterView) {
+
+                                              }
+                                          });
+
+                newPostImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        CropImage.activity()
+                                .setGuidelines(CropImageView.Guidelines.ON)
+                                .setMinCropResultSize(512, 512)
+                                .setAspectRatio(1, 1)
+                                .start(NewPostActivity.this);
+                    }
+                });
 
         newPostBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,7 +121,6 @@ public class NewPostActivity extends AppCompatActivity {
                 final String desc = newPostDesc.getText().toString();
 
                 if(!(desc.length() == 0 || postImageUri == null)){
-                    newPostProgress.setVisibility(View.VISIBLE);
                     String randomName = random();
 
                     StorageReference filePath = storageReference.child("post_images").child(randomName);
@@ -94,12 +135,12 @@ public class NewPostActivity extends AppCompatActivity {
                                     String user_id = mAuth.getCurrentUser().getUid();
 
                                     Map<String, Object> postMap = new HashMap<>();
-                                    postMap.put("image_url", downloadUri);
+                                    postMap.put("imageUrl", downloadUri);
                                     postMap.put("desc", desc);
-                                    postMap.put("user_id", user_id);
+                                    postMap.put("userId", user_id);
                                     postMap.put("timeStamp", FieldValue.serverTimestamp());
 
-                                    firebaseFirestore.collection("Posts").add(postMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                                    firebaseFirestore.collection("Posts").document(category + " Posts").collection(category).add(postMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                                         @Override
                                         public void onComplete(@NonNull Task<DocumentReference> task) {
                                             if(task.isSuccessful()){
@@ -112,7 +153,6 @@ public class NewPostActivity extends AppCompatActivity {
                                                 String error = task.getException().toString();
                                                 Toast.makeText(NewPostActivity.this, error, Toast.LENGTH_LONG).show();
                                             }
-                                            newPostProgress.setVisibility(View.VISIBLE);
                                         }
                                     });
                                 }
@@ -152,4 +192,5 @@ public class NewPostActivity extends AppCompatActivity {
         }
         return randomStringBuilder.toString();
     }
+
 }
