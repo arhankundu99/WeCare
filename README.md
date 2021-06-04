@@ -1,5 +1,5 @@
 # WeCare
-An android app for donation of food, clothes, books and blood
+An android app for donation of food, clothes, books and blood which uses firebase database
 
 ## Account Registration and Login
 <table>
